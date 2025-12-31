@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 async def sample():
-    return {"message": "Hello, World!"}
+    return {"Happy New Year Puppyyyyyyyyyyy"}
