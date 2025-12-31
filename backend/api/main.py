@@ -4,4 +4,4 @@ app = FastAPI()
 
 @app.get("/")
 async def sample():
-    return {"Happy New Year Puppyyyyyyyyyyy"}
+    return {"message": "Supply Chain Resilience Backend is running."}
