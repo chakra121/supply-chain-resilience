@@ -10,7 +10,7 @@ export default function Home() {
     setCount(count + 1);
   }
   useEffect(() => {
-    axios.get("https://supply-chain-resilience-backend.vercel.app/")
+    axios.get(`${process.env.NEXT_PUBLIC_API_URL}/`)
     .then((response) => {
       console.log("Data fetched:", response);
       setMesssage(response.data.message);
