@@ -1,22 +1,10 @@
-# Web Framework (Keep)
 fastapi
 uvicorn
 python-multipart
 python-dotenv
-
-# Database (Keep)
 pymongo
 dnspython
-
-# AI & Machine Learning (The Heavy Stuff - Version locks removed)
-# We use 'xgboost' and 'scikit-learn' but try to avoid 'pandas' if possible
+google-genai
 xgboost
 scikit-learn
-numpy
 joblib
-
-# Generative AI (Keep)
-google-genai
-
-# Utilities
-PyJWT

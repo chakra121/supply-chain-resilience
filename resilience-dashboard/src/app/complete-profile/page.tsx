@@ -27,7 +27,7 @@ interface ProfileForm {
 }
 
 export default function CompleteProfile() {
-  const { user } = useAuth();
+  const auth = useAuth();
   const params = useSearchParams();
 
   const roleParam = params.get("role"); // optional
@@ -49,10 +49,15 @@ export default function CompleteProfile() {
 
   const handleSubmit = async () => {
     try {
+      if (!auth?.user) {
+        alert("User not authenticated");
+        return;
+      }
+
       if (role === "executive") {
         await registerExecutive({
           name: form.name,
-          email: user.email,
+          email: auth.user.email,
           company_name: form.company_name,
         });
       } else {
@@ -65,7 +70,7 @@ export default function CompleteProfile() {
 
         await registerAnalyst({
           name: form.name,
-          email: user.email,
+          email: auth.user.email,
           executive_email: form.executive_email,
           company_name: exec.company_name,
         });
