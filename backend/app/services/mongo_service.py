@@ -11,7 +11,8 @@ client = MongoClient(MONGO_URI)
 
 # Explicit DB name
 db = client["supply_chain_resilience"]
-collection = db["predictions"]
+predictions_collection = db["predictions"]
+users_collection = db["users"]
 
 def save_prediction(data):
     document = {

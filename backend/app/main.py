@@ -1,14 +1,29 @@
 from fastapi import FastAPI
+from fastapi import Depends
 from pydantic import BaseModel
 
+from fastapi.middleware.cors import CORSMiddleware
+from app.middleware.auth_middleware import verify_token
 from app.services.prediction_service import predict_inventory_decision
 from app.services.mongo_service import (
     get_recent_predictions,
     get_resilience_trend,
     get_route_risk_summary
 )
+from app.routes import users, predictions
 
 app = FastAPI(title="Supply Chain Resilience System")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # for development (later restrict)
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+app.include_router(users.router)
+app.include_router(predictions.router)
 
 
 class InventoryRequest(BaseModel):
@@ -26,8 +41,9 @@ def root():
 
 
 @app.post("/predict")
-def predict_inventory(request: InventoryRequest):
+def predict_inventory(request: InventoryRequest, user=Depends(verify_token)):
     result = predict_inventory_decision(
+        user_email=user["email"],
         product_id=request.product_id,
         current_inventory=request.current_inventory,
         origin_country=request.origin_country,

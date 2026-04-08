@@ -43,6 +43,7 @@ Rules:
 - Avoid repeating raw numbers unnecessarily.
 - Focus on business impact.
 - Markdown only.
+- Make the subheadings bold and larger.
 """
 
     response = client.models.generate_content(

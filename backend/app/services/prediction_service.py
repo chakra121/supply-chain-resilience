@@ -8,7 +8,7 @@ from app.services.gemini_service import generate_executive_summary
 from app.utils.geo_utils import haversine_distance
 from app.services.geopolitical_service import get_geopolitical_risk
 from app.services.weather_service import get_weather_risk
-from app.services.mongo_service import save_prediction
+from app.services.mongo_service import save_prediction, db
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_PATH = os.path.join(BASE_DIR, "ml", "models")
@@ -16,6 +16,7 @@ MODEL_PATH = os.path.join(BASE_DIR, "ml", "models")
 delay_model = joblib.load(os.path.join(MODEL_PATH, "delay_model.pkl"))
 demand_model = joblib.load(os.path.join(MODEL_PATH, "demand_model.pkl"))
 
+predictions = db["predictions"]
 
 def generate_future_dates(start_date, end_date):
     current = start_date
@@ -24,13 +25,26 @@ def generate_future_dates(start_date, end_date):
         current += timedelta(days=1)
 
 
+def get_predictions_by_analyst(email):
+    return list(predictions.find(
+        {"analyst_email": email},
+        {"_id": 0}
+    ).sort("created_at", -1))
+
+
+def get_predictions_by_executive(analyst_email):
+    return list(predictions.find(
+        {"analyst_email": analyst_email},
+        {"_id": 0}
+    ).sort("created_at", -1))
+
 def predict_inventory_decision(
     product_id,
     current_inventory,
     origin_country,
     destination_country,
     shipping_mode,
-    sustain_until_date
+    sustain_until_date, user_email=None
 ):
 
     today = datetime.today()
@@ -96,7 +110,7 @@ def predict_inventory_decision(
         weather_risk,
         transport_risk,
         today.month,
-        0,  # season placeholder
+        0,
         is_international
     ]])
 
@@ -137,6 +151,7 @@ def predict_inventory_decision(
     })
 
     final_output = {
+    "user_email": user_email,
     "delay_probability": float(round(delay_probability, 2)),
     "forecasted_total_demand": float(round(inventory_plan["forecasted_total_demand"], 2)),
     "recommended_order_quantity": float(round(inventory_plan["recommended_order_quantity"], 2)),
@@ -146,7 +161,5 @@ def predict_inventory_decision(
     "resilience_score": float(round(resilience_score, 2)),
     "executive_summary": summary
     }
-
-    save_prediction(final_output)
 
     return final_output

@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "supply-chain-resilience-c3142",
+  "private_key_id": "a2d549713c90387cd7d8714b0945419b1c795db2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDRLx7VatlwLgi6\nxO6esimRyzUpjfI8QtD+orYCqRq3D+uayqxr1DSew/2WQlSbzXDaEBlbsUy++emB\n2q4I7AVBEe2/TDNOyOiKYqeZWXT6xxORdH6wo7QQERrN8tEcDT6ltH8eUpi0Y59j\nmSJgNXULzVqP7eusbxk03WvoyAcPe9v6cMzI97+73tq7Jbhg67Xu7TB3JbbJOy1B\np4tzApuUOeex8scHGWjuBkdmlmVGPeiZ0RSGC6/jZoYydRsZaLOoyXOcP1LBLr17\nMHlcJFGjgrTJbeNg4tZ2GZfr889mMlMWW+D1+1500jKoCxlZMPQiOIX06nOEx+Lr\n1M/CY3WfAgMBAAECggEANeg3wPX1LQSf+Umw2LK/JbRBcgEDkOYDJ+vUjeD4Yn62\nz8A1KOCZ4uRNIIDdfv01fOyzLD8HsRuEQpORT/lK7VbqdubzPfVmf+sml81G6S2O\nbGiiEXFOgOl3h+VwYBNFtrxKGg1dDvexZqBbDIIaNL1p/jdpCZnj3AzHt0h9EU75\nc+Emhs/A2O09zAzkzBg5fqK6VtEB2bgJCxAv7nyGy2f7QDQvFMm+ALx6QXWSp69i\nW9YjpL8ivm8xJ3Lv8yvePBLkQkffjXz4D6ZJ2YNcnIOZHo+KauOdDLqHkWp7cf2w\nzhx2PhFYvRWFsCu4M441tNK4K68mTk4BckBCjjrRKQKBgQD4N/PAs02iru9O4gz4\nfv3IzVhGtdSMPbhNoLHzDN+wDJd9Z1hDyUDx+99K0aB5QUNaTOLc5SHOZdBIdYAo\npTm/kRRP7UJxUVTPPcNR+WWR2lgRqyanaqwUhdwwaOYtUC+gj4W//o5mRSEeHHnF\ngUO1Cxxo0PNi0Zjno8HdnJXpAwKBgQDXvebTygXahx8R9bRBc5hxS0rl4bQ6OOcp\nP6hxNLMsKebrIT8bWbkygE9aGz8C19p3VUZiBtKi8Nzl29ET4+oOHpJ37Y6j93Hs\ntvyRwEAWt7d9LQgtmc+/Af765FmycwBlf291rOaowL90C0AyhcAG2rb3SQ0meYyC\nScLPPztoNQKBgCntWZENOGnoXqfWaxZ2bOvEM8sN368opb8HC8fgPtB/7/7QvAoH\nLp8xSlBbBF429eeE4TUqxwEUFZCHuHQlJJIFMYcmrnhxon+3EQ0BsXRni0TAwjC5\nRgPZcI4EygyRZNocJB2AJBGGT8fES5Ve9k7YZ54U3Wetu8Q01wRV9MR9AoGBAIvd\n2eBEgTcDkukZ2hr0zkflAFG42hdE/NiJJLL/74kaQVL+4uLgcGiFNuy77UXymvfy\nmQbEVZq9fPioYgv7Hqq4t0x4/pjeu0Uz/NqhQOt5f8PvhfXKWh0DNkOB94TxebhT\nvfcUeRW+oGCjSqN2gt/uu9/lxFjFRIrTNzEVVXZhAoGBAJbS0f6TaTgC9ibbXfC8\nnIhCuWpAk1/QD7bJcu50pfOm8u+PmKV1dWAtqvSYERo+ObOCqj+8b9/2JuLgLFc3\nHObA568qBBa3ALtDsTU/I92JJhzERawhCDPzSudQxoHrQr5cc9vT75+SuJPcp64P\nd/G9vAkHCsL5qB5/svOu6UOF\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-fbsvc@supply-chain-resilience-c3142.iam.gserviceaccount.com",
+  "client_id": "105027746487043797627",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-fbsvc%40supply-chain-resilience-c3142.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
