@@ -10,7 +10,20 @@ import {
   SelectItem,
 } from "@heroui/react";
 
-export default function PredictionForm({ onSubmit }: any) {
+interface PredictionFormProps {
+  onSubmit: (data: {
+    title: string;
+    description: string;
+    product_id: number;
+    current_inventory: number;
+    origin_country: string;
+    destination_country: string;
+    shipping_mode: string;
+    sustain_until_date: string;
+  }) => Promise<void>;
+}
+
+export default function PredictionForm({ onSubmit }: PredictionFormProps) {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -24,7 +37,7 @@ export default function PredictionForm({ onSubmit }: any) {
 
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (key: string, value: any) => {
+  const handleChange = (key: string, value: string | number) => {
     setForm((prev) => ({
       ...prev,
       [key]: value,
@@ -64,7 +77,6 @@ export default function PredictionForm({ onSubmit }: any) {
   return (
     <Card className="shadow-xl border border-gray-200">
       <CardBody className="space-y-5">
-
         {/* TITLE */}
         <Input
           label="Title"
@@ -95,9 +107,7 @@ export default function PredictionForm({ onSubmit }: any) {
             label="Current Inventory"
             type="number"
             value={form.current_inventory}
-            onChange={(e) =>
-              handleChange("current_inventory", e.target.value)
-            }
+            onChange={(e) => handleChange("current_inventory", e.target.value)}
             isRequired
           />
         </div>
@@ -108,9 +118,7 @@ export default function PredictionForm({ onSubmit }: any) {
             label="Origin Country"
             placeholder="e.g., India"
             value={form.origin_country}
-            onChange={(e) =>
-              handleChange("origin_country", e.target.value)
-            }
+            onChange={(e) => handleChange("origin_country", e.target.value)}
             isRequired
           />
 
@@ -144,9 +152,7 @@ export default function PredictionForm({ onSubmit }: any) {
           type="date"
           label="Sustain Inventory Until"
           value={form.sustain_until_date}
-          onChange={(e) =>
-            handleChange("sustain_until_date", e.target.value)
-          }
+          onChange={(e) => handleChange("sustain_until_date", e.target.value)}
           isRequired
         />
 

@@ -11,24 +11,31 @@ import {
   CardBody,
 } from "@heroui/react";
 import { useAuth } from "@/context/AuthContext";
-import {
-  registerExecutive,
-  registerAnalyst,
-  getExecutives,
-} from "@/lib/api";
-import { useRouter, useSearchParams } from "next/navigation";
+import { registerExecutive, registerAnalyst, getExecutives } from "@/lib/api";
+import { useSearchParams } from "next/navigation";
+
+interface Executive {
+  email: string;
+  name: string;
+  company_name: string;
+}
+
+interface ProfileForm {
+  name: string;
+  company_name: string;
+  executive_email: string;
+}
 
 export default function CompleteProfile() {
   const { user } = useAuth();
-  const router = useRouter();
   const params = useSearchParams();
 
   const roleParam = params.get("role"); // optional
 
   const [role, setRole] = useState(roleParam || "analyst");
-  const [executives, setExecutives] = useState<any[]>([]);
+  const [executives, setExecutives] = useState<Executive[]>([]);
 
-  const [form, setForm] = useState<any>({
+  const [form, setForm] = useState<ProfileForm>({
     name: "",
     company_name: "",
     executive_email: "",
@@ -41,49 +48,47 @@ export default function CompleteProfile() {
   }, [role]);
 
   const handleSubmit = async () => {
-  try {
-    if (role === "executive") {
-      await registerExecutive({
-        name: form.name,
-        email: user.email,
-        company_name: form.company_name,
-      });
-    } else {
-      const exec = executives.find(
-        (e) => e.email === form.executive_email
-      );
+    try {
+      if (role === "executive") {
+        await registerExecutive({
+          name: form.name,
+          email: user.email,
+          company_name: form.company_name,
+        });
+      } else {
+        const exec = executives.find((e) => e.email === form.executive_email);
 
-      await registerAnalyst({
-        name: form.name,
-        email: user.email,
-        executive_email: form.executive_email,
-        company_name: exec.company_name,
-      });
+        if (!exec) {
+          alert("Selected executive not found");
+          return;
+        }
+
+        await registerAnalyst({
+          name: form.name,
+          email: user.email,
+          executive_email: form.executive_email,
+          company_name: exec.company_name,
+        });
+      }
+
+      // 🔥 IMPORTANT FIX
+      window.location.href = "/dashboard";
+    } catch (err) {
+      console.error(err);
+      alert("Failed to complete profile");
     }
-
-    // 🔥 IMPORTANT FIX
-    window.location.href = "/dashboard";
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to complete profile");
-  }
-};
+  };
 
   return (
     <Card className="max-w-md mx-auto mt-20">
       <CardBody className="space-y-4">
-        <h2 className="text-xl font-semibold">
-          Complete Your Profile
-        </h2>
+        <h2 className="text-xl font-semibold">Complete Your Profile</h2>
 
         {/* ROLE SELECT */}
         <Select
           label="Select Role"
           selectedKeys={[role]}
-          onSelectionChange={(keys) =>
-            setRole(Array.from(keys)[0] as string)
-          }
+          onSelectionChange={(keys) => setRole(Array.from(keys)[0] as string)}
         >
           <SelectItem key="executive">Executive</SelectItem>
           <SelectItem key="analyst">Analyst</SelectItem>
@@ -92,18 +97,14 @@ export default function CompleteProfile() {
         {/* NAME */}
         <Input
           label="Name"
-          onChange={(e) =>
-            setForm({ ...form, name: e.target.value })
-          }
+          onChange={(e) => setForm({ ...form, name: e.target.value })}
         />
 
         {/* EXECUTIVE FIELDS */}
         {role === "executive" && (
           <Input
             label="Company Name"
-            onChange={(e) =>
-              setForm({ ...form, company_name: e.target.value })
-            }
+            onChange={(e) => setForm({ ...form, company_name: e.target.value })}
           />
         )}
 
@@ -126,9 +127,7 @@ export default function CompleteProfile() {
           </Select>
         )}
 
-        <Button onPress={handleSubmit}>
-          Save Profile
-        </Button>
+        <Button onPress={handleSubmit}>Save Profile</Button>
       </CardBody>
     </Card>
   );

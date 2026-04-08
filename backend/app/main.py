@@ -16,7 +16,7 @@ app = FastAPI(title="Supply Chain Resilience System")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # for development (later restrict)
+    allow_origins=["http://localhost:3000", "https://supply-chain-resilience-frontend.vercel.app"],  # for development (later restrict)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

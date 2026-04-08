@@ -12,14 +12,27 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { getExecutives, registerAnalyst } from "@/lib/api";
 import { useRouter } from "next/navigation";
-import SoftAurora from '@/components/SoftAurora';
+import SoftAurora from "@/components/SoftAurora";
+
+interface Executive {
+  email: string;
+  name: string;
+  company_name: string;
+}
+
+interface AnalystForm {
+  name: string;
+  email: string;
+  password: string;
+  executive_email: string;
+}
 
 export default function AnalystRegister() {
-  const { registerWithEmail, loginWithGoogle } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
 
-  const [executives, setExecutives] = useState<any[]>([]);
-  const [form, setForm] = useState<any>({
+  const [executives, setExecutives] = useState<Executive[]>([]);
+  const [form, setForm] = useState<AnalystForm>({
     name: "",
     email: "",
     password: "",
@@ -30,10 +43,21 @@ export default function AnalystRegister() {
     getExecutives().then((res) => setExecutives(res.data));
   }, []);
 
+  if (!auth) {
+    return <div>Loading...</div>;
+  }
+
+  const { registerWithEmail, loginWithGoogle } = auth;
+
   const handleRegister = async () => {
     try {
       await registerWithEmail(form.email, form.password);
       const exec = executives.find((e) => e.email === form.executive_email);
+
+      if (!exec) {
+        alert("Selected executive not found");
+        return;
+      }
 
       await registerAnalyst({
         name: form.name,
@@ -58,7 +82,6 @@ export default function AnalystRegister() {
   return (
     // 🛠️ Wrapper to handle the full-screen layout
     <main className="relative min-h-screen w-full flex items-center bg-black justify-center p-4">
-      
       {/* 🌊 Background Layer: Fixed and behind everything */}
       <div className="fixed inset-0 z-10">
         <SoftAurora
@@ -84,7 +107,9 @@ export default function AnalystRegister() {
         <CardBody className="p-8 space-y-6">
           <div className="text-center">
             <h2 className="text-3xl font-bold text-gray-800">Analyst Signup</h2>
-            <p className="text-gray-500 mt-2">Join your organization's supply chain team</p>
+            <p className="text-gray-500 mt-2">
+              Join your organization&apos;s supply chain team
+            </p>
           </div>
 
           <div className="space-y-4">
@@ -109,17 +134,25 @@ export default function AnalystRegister() {
               label="Select Executive"
               variant="bordered"
               className="text-black"
-              selectedKeys={form.executive_email ? new Set([form.executive_email]) : new Set()}
+              selectedKeys={
+                form.executive_email
+                  ? new Set([form.executive_email])
+                  : new Set()
+              }
               onSelectionChange={(keys) => {
                 const selected = Array.from(keys)[0] as string;
-                setForm((prev: any) => ({
+                setForm((prev: AnalystForm) => ({
                   ...prev,
                   executive_email: selected,
                 }));
               }}
             >
               {executives.map((e) => (
-                <SelectItem key={e.email} textValue={e.name} className="text-black">
+                <SelectItem
+                  key={e.email}
+                  textValue={e.name}
+                  className="text-black"
+                >
                   {e.name} ({e.company_name})
                 </SelectItem>
               ))}
@@ -127,7 +160,12 @@ export default function AnalystRegister() {
           </div>
 
           <div className="flex flex-col gap-3 mt-4">
-            <Button color="primary" size="lg" onPress={handleRegister} className="font-semibold">
+            <Button
+              color="primary"
+              size="lg"
+              onPress={handleRegister}
+              className="font-semibold"
+            >
               Create Account
             </Button>
 
@@ -137,7 +175,12 @@ export default function AnalystRegister() {
               <div className="grow border-t border-gray-300"></div>
             </div>
 
-            <Button variant="ghost" size="lg" onPress={handleGoogle} className="font-medium">
+            <Button
+              variant="ghost"
+              size="lg"
+              onPress={handleGoogle}
+              className="font-medium"
+            >
               Sign up with Google
             </Button>
           </div>

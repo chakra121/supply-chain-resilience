@@ -13,7 +13,16 @@ import {
 } from "recharts";
 import { Card, CardBody } from "@heroui/react";
 
-export default function Charts({ data }: any) {
+interface ChartData {
+  forecasted_total_demand?: number;
+  required_stock?: number;
+  recommended_order_quantity?: number;
+  delay_probability?: number;
+  resilience_score?: number;
+  safety_stock?: number;
+}
+
+export default function Charts({ data }: { data: ChartData | null }) {
   if (!data) return null;
 
   // 📊 Bar Chart Data
@@ -52,8 +61,7 @@ export default function Charts({ data }: any) {
     },
     {
       name: "Working Stock",
-      value:
-        (data?.required_stock || 0) - (data?.safety_stock || 0),
+      value: (data?.required_stock || 0) - (data?.safety_stock || 0),
     },
   ];
 

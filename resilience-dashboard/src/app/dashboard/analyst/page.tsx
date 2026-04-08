@@ -12,22 +12,26 @@ import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { Card, CardBody } from "@heroui/react";
 
+interface PredictionData {
+  executive_summary?: string;
+  [key: string]: unknown;
+}
+
 export default function AnalystDashboard() {
   const { user, profile, loading } = useAuth();
   const router = useRouter();
 
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<PredictionData | null>(null);
   const [loadingPrediction, setLoadingPrediction] = useState(false);
 
   useEffect(() => {
     if (!loading) {
       if (!user) router.push("/login");
-      else if (profile?.role !== "analyst")
-        router.push("/dashboard");
+      else if (profile?.role !== "analyst") router.push("/dashboard");
     }
-  }, [user, profile, loading]);
+  }, [user, profile, loading, router]);
 
-  const handlePredict = async (form: any) => {
+  const handlePredict = async (form: Record<string, unknown>) => {
     try {
       setLoadingPrediction(true);
       const res = await createPrediction(form);
@@ -46,9 +50,7 @@ export default function AnalystDashboard() {
       <div className="p-6 space-y-6">
         <Card className="shadow-md rounded-xl">
           <CardBody>
-            <h2 className="text-xl font-bold mb-4">
-              Create Prediction
-            </h2>
+            <h2 className="text-xl font-bold mb-4">Create Prediction</h2>
 
             <PredictionForm
               onSubmit={handlePredict}
@@ -58,7 +60,7 @@ export default function AnalystDashboard() {
         </Card>
 
         {data && (
-         <>
+          <>
             <PredictionResults data={data} />
 
             <Charts data={data} />
@@ -68,9 +70,7 @@ export default function AnalystDashboard() {
                   Executive Summary
                 </h3>
 
-                <MarkdownViewer
-                  content={data?.executive_summary}
-                />
+                <MarkdownViewer content={data?.executive_summary} />
               </CardBody>
             </Card>
           </>

@@ -2,7 +2,21 @@
 
 import { Card, CardBody, Progress, Divider } from "@heroui/react";
 
-export default function PredictionResults({ data }: any) {
+interface PredictionData {
+  delay_probability?: number;
+  resilience_score?: number;
+  recommended_order_quantity?: number;
+  forecasted_total_demand?: number;
+  required_stock?: number;
+  safety_stock?: number;
+  days_to_cover?: number;
+}
+
+export default function PredictionResults({
+  data,
+}: {
+  data: PredictionData | null;
+}) {
   if (!data) return null;
 
   return (
@@ -12,7 +26,7 @@ export default function PredictionResults({ data }: any) {
           <CardBody>
             <p className="text-sm text-gray-500">Delay Probability</p>
             <h2 className="text-3xl font-bold text-red-500">
-              {(data?.delay_probability * 100 || 0).toFixed(1)}%
+              {((data?.delay_probability ?? 0) * 100).toFixed(1)}%
             </h2>
           </CardBody>
         </Card>
@@ -53,21 +67,15 @@ export default function PredictionResults({ data }: any) {
             </p>
             <p>
               Required Stock:{" "}
-              <span className="font-semibold">
-                {data?.required_stock ?? 0}
-              </span>
+              <span className="font-semibold">{data?.required_stock ?? 0}</span>
             </p>
             <p>
               Safety Stock:{" "}
-              <span className="font-semibold">
-                {data?.safety_stock ?? 0}
-              </span>
+              <span className="font-semibold">{data?.safety_stock ?? 0}</span>
             </p>
             <p>
               Days to Cover:{" "}
-              <span className="font-semibold">
-                {data?.days_to_cover ?? 0}
-              </span>
+              <span className="font-semibold">{data?.days_to_cover ?? 0}</span>
             </p>
           </div>
         </CardBody>
@@ -87,10 +95,7 @@ export default function PredictionResults({ data }: any) {
 
           <div>
             <p className="text-sm mb-1">Resilience Strength</p>
-            <Progress
-              value={data?.resilience_score || 0}
-              color="success"
-            />
+            <Progress value={data?.resilience_score || 0} color="success" />
           </div>
         </CardBody>
       </Card>

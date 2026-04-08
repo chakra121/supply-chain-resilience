@@ -5,10 +5,14 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 export default function DashboardRouter() {
-  const { user, profile, loading } = useAuth();
+  const auth = useAuth();
   const router = useRouter();
 
   useEffect(() => {
+    if (!auth) return;
+
+    const { user, profile, loading } = auth;
+
     if (loading) return;
 
     // ❌ Not logged in
@@ -17,15 +21,13 @@ export default function DashboardRouter() {
       return;
     }
 
-
     // ✅ Role-based routing
-    if (profile.role === "executive") {
+    if (profile && profile.role === "executive") {
       router.push("/dashboard/executive");
     } else {
       router.push("/dashboard/analyst");
     }
-
-  }, [user, profile, loading]);
+  }, [auth, router]);
 
   return <p className="p-6">Redirecting...</p>;
 }

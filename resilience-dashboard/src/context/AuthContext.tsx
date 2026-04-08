@@ -1,6 +1,12 @@
 "use client";
 
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  ReactNode,
+} from "react";
 import { auth } from "@/lib/firebase";
 import {
   GoogleAuthProvider,
@@ -9,14 +15,37 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  User,
+  UserCredential,
 } from "firebase/auth";
 import { getUserProfile } from "@/lib/api";
 
-const AuthContext = createContext<any>(null);
+interface UserProfile {
+  [key: string]: unknown;
+}
 
-export const AuthProvider = ({ children }: any) => {
-  const [user, setUser] = useState<any>(null);
-  const [profile, setProfile] = useState<any>(null);
+interface AuthContextType {
+  user: User | null;
+  profile: UserProfile | null;
+  loading: boolean;
+  registerWithEmail: (
+    email: string,
+    password: string,
+  ) => Promise<UserCredential>;
+  loginWithEmail: (email: string, password: string) => Promise<UserCredential>;
+  loginWithGoogle: () => Promise<void>;
+  logout: () => Promise<void>;
+}
+
+interface AuthProviderProps {
+  children: ReactNode;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -27,7 +56,7 @@ export const AuthProvider = ({ children }: any) => {
         try {
           const res = await getUserProfile(u.email);
           setProfile(res.data);
-        } catch (err) {
+        } catch {
           console.log("Profile not found");
           setProfile(null);
         }

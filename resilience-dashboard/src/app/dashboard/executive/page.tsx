@@ -1,16 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  getAnalysts,
-  getPredictionsByAnalyst,
-} from "@/lib/api";
-import {
-  Select,
-  SelectItem,
-  Card,
-  CardBody,
-} from "@heroui/react";
+import { getAnalysts, getPredictionsByAnalyst } from "@/lib/api";
+import { Select, SelectItem, Card, CardBody } from "@heroui/react";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 
@@ -19,13 +11,29 @@ import MarkdownViewer from "@/components/MarkdownViewer";
 import Charts from "@/components/Charts";
 import TopBar from "@/components/TopBar";
 
+interface Analyst {
+  email: string;
+  name: string;
+}
+
+interface Prediction {
+  _id: string;
+  title: string;
+  description: string;
+  output: {
+    executive_summary?: string;
+    [key: string]: unknown;
+  };
+}
+
 export default function ExecutiveDashboard() {
   const { profile, user, loading } = useAuth();
   const router = useRouter();
 
-  const [analysts, setAnalysts] = useState<any[]>([]);
-  const [predictions, setPredictions] = useState<any[]>([]);
-  const [selectedPrediction, setSelectedPrediction] = useState<any>(null);
+  const [analysts, setAnalysts] = useState<Analyst[]>([]);
+  const [predictions, setPredictions] = useState<Prediction[]>([]);
+  const [selectedPrediction, setSelectedPrediction] =
+    useState<Prediction | null>(null);
 
   // 🔐 Auth
   useEffect(() => {
@@ -33,7 +41,7 @@ export default function ExecutiveDashboard() {
       if (!user) router.push("/login");
       else if (profile?.role !== "executive") router.push("/dashboard");
     }
-  }, [user, profile, loading]);
+  }, [user, profile, loading, router]);
 
   // 👤 Fetch analysts
   useEffect(() => {
@@ -55,7 +63,7 @@ export default function ExecutiveDashboard() {
   // 📊 Select prediction
   const handlePredictionChange = (id: string) => {
     const selected = predictions.find((p) => p._id === id);
-    setSelectedPrediction(selected);
+    setSelectedPrediction(selected ?? null);
   };
 
   return (
@@ -121,9 +129,7 @@ export default function ExecutiveDashboard() {
                   Executive Summary
                 </h3>
                 <MarkdownViewer
-                  content={
-                    selectedPrediction.output?.executive_summary
-                  }
+                  content={selectedPrediction.output?.executive_summary}
                 />
               </CardBody>
             </Card>
